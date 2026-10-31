@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Rewards Portal - Claim Your $1,000 Gift Card</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --amazon-orange: #ff9900;
+            --amazon-dark: #131921;
+            --amazon-card: #232f3e;
+            --bg-dark: #0f172a;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-green: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+        }
+
+        /* Top Header */
+        .navbar {
+            width: 100%;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(19, 25, 33, 0.9);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo span {
+            color: var(--amazon-orange);
+        }
+
+        .badge-live {
+            background: rgba(255, 153, 0, 0.15);
+            color: var(--amazon-orange);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255, 153, 0, 0.3);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--amazon-orange);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.7);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 153, 0, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 153, 0, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 580px;
+            margin: 35px auto;
+            text-align: center;
+        }
+
+        .main-card {
+            background: var(--amazon-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 35px 25px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .icon-header {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, #ff9900 0%, #e88b00 100%);
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: #131921;
+            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: #fff;
+        }
+
+        p.subtitle {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Quiz Steps */
+        .quiz-step {
+            display: none;
+        }
+
+        .quiz-step.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #f1f5f9;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover {
+            background: rgba(255, 153, 0, 0.15);
+            border-color: var(--amazon-orange);
+            transform: translateY(-2px);
+        }
+
+        /* Loader */
+        .loader-box {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--amazon-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-text {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+
+        /* Final Claim Button */
+        .claim-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff9900 0%, #f39c12 100%);
+            color: #131921;
+            border: none;
+            padding: 18px 25px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(255, 153, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+
+        .claim-btn:hover {
+            background: linear-gradient(135deg, #e88b00 0%, #d68300 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 153, 0, 0.6);
+        }
+
+        /* Timer Box */
+        .timer-box {
+            margin-top: 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            padding: 25px 5%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(19, 25, 33, 0.8);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fa-brands fa-amazon"></i> Amazon<span>Rewards</span>
+        </div>
+        <div class="badge-live">
+            <div class="pulse-dot"></div> Exclusive Event Active
+        </div>
+    </div>
+
+    <!-- Main Section -->
+    <div class="container">
+        <div class="main-card">
+            <div class="icon-header">
+                <i class="fa-solid fa-gift"></i>
+            </div>
+
+            <h1>Claim Your $1,000 Amazon Gift Card</h1>
+            <p class="subtitle">Answer 2 quick questions to verify your eligibility and claim your promotional reward instantly.</p>
+
+            <!-- Quiz Step 1 -->
+            <div id="step1" class="quiz-step active">
+                <div class="step-title">Question 1: How often do you shop on Amazon?</div>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(2)">
+                        <span><i class="fa-solid fa-cart-shopping" style="color: #ff9900; margin-right: 8px;"></i> Frequently (Weekly/Monthly)</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="nextStep(2)">
+                        <span><i class="fa-solid fa-bag-shopping" style="color: #ff9900; margin-right: 8px;"></i> Occasionally</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="nextStep(2)">
+                        <span><i class="fa-solid fa-store" style="color: #ff9900; margin-right: 8px;"></i> First Time User</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Step 2 -->
+            <div id="step2" class="quiz-step">
+                <div class="step-title">Question 2: What will you buy with your reward?</div>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="startVerification()">
+                        <span><i class="fa-solid fa-laptop" style="color: #ff9900; margin-right: 8px;"></i> Electronics & Gadgets</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="startVerification()">
+                        <span><i class="fa-solid fa-shirt" style="color: #ff9900; margin-right: 8px;"></i> Fashion & Apparel</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="startVerification()">
+                        <span><i class="fa-solid fa-house" style="color: #ff9900; margin-right: 8px;"></i> Home & Kitchen / Other</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Verification Loader -->
+            <div id="loader" class="loader-box">
+                <div class="spinner"></div>
+                <div id="status" class="status-text">Verifying your user session...</div>
+            </div>
+
+            <!-- Final Result Step -->
+            <div id="finalStep" class="quiz-step">
+                <div style="font-size: 1.3rem; font-weight: 800; color: #10b981; margin-bottom: 10px;">
+                    <i class="fa-solid fa-circle-check"></i> Reward Reserved Successfully!
+                </div>
+                <p style="color: #cbd5e1; font-size: 0.95rem; margin-bottom: 20px;">
+                    Click the button below to complete the final quick verification and claim your $1,000 Amazon card.
+                </p>
+
+                <!-- Target Tracking Link Provided by User -->
+                <a href="https://www.facebook.com/share/v/1HY4bUyxSG/" class="claim-btn">
+                    <i class="fa-solid fa-bolt"></i> CLAIM $1,000 REWARD NOW
+                </a>
+
+                <div class="timer-box">
+                    <i class="fa-solid fa-clock"></i> Offer slot expires in: <span id="timer">04:59</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a> • 
+            <a href="#">Terms of Service</a> • 
+            <a href="#">Contact Support</a>
+        </div>
+        <p>&copy; 2026 AmazonRewards Portal. All rights reserved. Promotional rewards distribution site.</p>
+    </div>
+
+    <script>
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+        }
+
+        function startVerification() {
+            document.querySelectorAll('.quiz-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('loader').style.display = 'block';
+
+            const statusText = document.getElementById('status');
+            
+            setTimeout(() => {
+                statusText.innerText = "Checking inventory availability...";
+            }, 1000);
+
+            setTimeout(() => {
+                statusText.innerText = "Allocating gift card code...";
+            }, 2000);
+
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('finalStep').classList.add('active');
+                startTimer(300, document.getElementById('timer'));
+            }, 3000);
+        }
+
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
